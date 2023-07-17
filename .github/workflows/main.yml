@@ -27,9 +27,9 @@ jobs:
         - name: 'Build and deploy Container App'
           uses: azure/container-apps-deploy-action@v1
           with:
-             acrName: ${{ secrets.REGISTRY_USERNAME }}
-             acrUsername: ${{ secrets.REGISTRY_USERNAME }}
-             acrPassword: ${{ secrets.REGISTRY_PASSWORD }}
+             registryUrl: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+             registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+             registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
              imageToDeploy: ${{ secrets.REGISTRY_LOGIN_SERVER }}/blazor8app:${{ github.sha }}
              containerAppName: blazor8app
              resourceGroup: ${{ secrets.RESOURCE_GROUP }}
