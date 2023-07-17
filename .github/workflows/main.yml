@@ -1,5 +1,5 @@
 on: [push]
-name: Linux_Container_Workflow
+name: Build image and Deploy container
 
 jobs:
     build-and-deploy:
