@@ -7,6 +7,8 @@
 	 <RazorLangVersion>8.0</RazorLangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
     <ProjectReference Include="..\Client\Client.csproj" />
   </ItemGroup>

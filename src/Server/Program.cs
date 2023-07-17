@@ -4,8 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddWebAssemblyComponents();
-    //.AddServerComponents();
+    .AddWebAssemblyComponents()
+    .AddServerComponents();
 
 var app = builder.Build();
 
@@ -22,7 +22,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.MapRazorComponents<App>()
-    .AddWebAssemblyRenderMode();
-    //.AddServerRenderMode();
+    .AddWebAssemblyRenderMode()
+    .AddServerRenderMode();
 
 app.Run();
