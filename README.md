@@ -4,6 +4,8 @@ Demonstrates the Server-side rendered pages, and the 2 render modes for embedded
 
 Check the ``Counter`` components.
 
+Based on a sample by [Artak](https://github.com/mkArtakMSFT).
+
 ## Publish
 
 Published to Azure as a Container App with GitHub Actions.
