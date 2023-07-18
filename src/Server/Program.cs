@@ -13,11 +13,13 @@ builder.Services.AddRazorComponents()
     .AddWebAssemblyComponents()
     .AddServerComponents();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDbContext<BlazorMovieContext>(c => c.UseInMemoryDatabase("db"));
 
 builder.Services.AddScoped<WeatherForecastService>();
 
-builder.Services.AddSingleton(sp => new RenderingContext(isServer: true));
+builder.Services.AddSingleton<RenderingContext, ServerRenderingContext>();
 
 var app = builder.Build();
 

@@ -10,6 +10,6 @@ builder.Services.AddScoped(sp =>
         BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
     });
 
-builder.Services.AddSingleton(sp => new RenderingContext(isServer: false));
+builder.Services.AddSingleton<RenderingContext, ClientRenderingContext>();
 
 await builder.Build().RunAsync();

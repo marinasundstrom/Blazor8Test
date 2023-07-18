@@ -2,16 +2,17 @@
 
 @using BlazorApp
 
-<button type="button" class="btn btn-primary" @onclick="IncrementCount">@(RenderingContext.IsClient ? "Client" : "Server") count: @_currentCount</button>
+<button type="button" class="btn btn-primary" @onclick="IncrementCount">@(RenderingContext.IsPrerendering ? "Prerendered" : RenderingContext.IsClient ? "Client" : "Server") count: @CurrentCount</button>
 
 @code {
-    int _currentCount = 0;
+     [Parameter]
+    public int CurrentCount { get; set; } = 0;
 
     [Parameter]
     public int IncrementAmount { get; set; } = 1;
 
     void IncrementCount()
     {
-        _currentCount += IncrementAmount;
+        CurrentCount += IncrementAmount;
     }
 }

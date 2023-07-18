@@ -1,8 +1,10 @@
 namespace BlazorApp;
 
-public sealed class RenderingContext(bool isServer)
+public abstract class RenderingContext
 {
-    public bool IsServer { get; } = isServer;
+    public virtual bool IsServer { get; }
 
-    public bool IsClient { get; } = !isServer;
+    public virtual bool IsClient { get; }
+
+    public virtual bool IsPrerendering { get; }
 }
