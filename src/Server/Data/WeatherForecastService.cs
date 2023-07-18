@@ -2,14 +2,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Data;
 
-public sealed class WeatherForecastService 
+public sealed class WeatherForecastService : IWeatherForecastService
 {
     static readonly string[] Summaries = new[]
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    public IEnumerable<WeatherForecast> GetWeatherForecasts(DateOnly startDate) 
+    public Task<IEnumerable<WeatherForecast>> GetWeatherForecasts(DateOnly startDate) 
     {
         var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
@@ -18,6 +18,6 @@ public sealed class WeatherForecastService
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         }).ToArray();
 
-        return forecasts;
+        return Task.FromResult<IEnumerable<WeatherForecast>>(forecasts);
     }
 }

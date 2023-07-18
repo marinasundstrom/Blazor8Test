@@ -17,7 +17,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<BlazorMovieContext>(c => c.UseInMemoryDatabase("db"));
 
-builder.Services.AddScoped<WeatherForecastService>();
+builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
 builder.Services.AddSingleton<RenderingContext, ServerRenderingContext>();
 
@@ -42,9 +42,9 @@ app.MapRazorComponents<App>()
     .AddWebAssemblyRenderMode()
     .AddServerRenderMode();
 
-app.MapGet("/api/weatherforecast", (DateOnly startDate, WeatherForecastService weatherForecastService) =>
+app.MapGet("/api/weatherforecast", async (DateOnly startDate, IWeatherForecastService weatherForecastService) =>
     {
-        var forecasts = weatherForecastService.GetWeatherForecasts(startDate);
+        var forecasts = await weatherForecastService.GetWeatherForecasts(startDate);
         return Results.Ok(forecasts);
     })
     .WithName("GetWeatherForecast")

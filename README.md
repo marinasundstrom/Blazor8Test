@@ -26,7 +26,7 @@ Pre-rendering just works. If you have a server-side rendered page with interacti
 
 * There is a ``RenderingContext`` object that can be injected into components to check whether your component is running on the server, or on the client (WebAssembly). There is also a property telling whether prerendering is in progress.
 
-* Added a ``Shared`` project for stuff (Models etc) that is used by both Server and Client.
+* Added a ``Shared`` project for stuff (Models etc) that is used by both Server and Client. There is an interface called ``IWeatherForecastService`` which has two implementations: one for server and another for the client.
 
 ## Publish
 

@@ -1,6 +1,6 @@
 ﻿@page "/showdata"
 @attribute [StreamRendering(true)]
-@inject WeatherForecastService WeatherForecastService
+@inject IWeatherForecastService WeatherForecastService
 
 @using BlazorApp.Data;
 
@@ -51,6 +51,6 @@ else
 
         var startDate = DateOnly.FromDateTime(DateTime.Now);
         
-        forecasts = WeatherForecastService.GetWeatherForecasts(startDate).ToArray();
+        forecasts = (await WeatherForecastService.GetWeatherForecasts(startDate)).ToArray();
     }
 }
