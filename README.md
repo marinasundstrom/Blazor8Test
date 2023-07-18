@@ -6,7 +6,7 @@ Check the ``Counter`` components.
 
 Based on a sample by [Artak](https://github.com/mkArtakMSFT).
 
-## Details
+## Contents
 
 Demonstrating the following features that have been made possible by the new unified architecture:
 
@@ -19,6 +19,14 @@ Demonstrating the following features that have been made possible by the new uni
 * Form model binding & validation in SSR pages.
 
 Pre-rendering just works. If you have a server-side rendered page with interactive components then they will all be rendered together the first time.
+
+## Technical details
+
+* There are two versions of the "Show data" page -``ShowData`` (server-side), and ``FetchData`` (client-side using Web API). Workaround with "FetchData" because you can't currently route to pages in WebAssembly.
+
+* There is a ``RenderingContext`` object that can be injected into components to check whether your component is running on the server, or on the client (WebAssembly). Like telling when a client-side component is being prerendered on the server.
+
+* Added a ``Shared`` project for stuff (Models etc) that is used by both Server and Client.
 
 ## Publish
 
