@@ -24,7 +24,7 @@ Pre-rendering just works. If you have a server-side rendered page with interacti
 
 * There are two versions of the "Show data" page -``ShowData`` (server-side), and ``FetchData`` (client-side using Web API). Workaround with "FetchData" because you can't currently route to pages in WebAssembly.
 
-* There is a ``RenderingContext`` object that can be injected into components to check whether your component is running on the server, or on the client (WebAssembly). Like telling when a client-side component is being prerendered on the server.
+* There is a ``RenderingContext`` object that can be injected into components to check whether your component is running on the server, or on the client (WebAssembly). There is also a property telling whether prerendering is in progress.
 
 * Added a ``Shared`` project for stuff (Models etc) that is used by both Server and Client.
 
