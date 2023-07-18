@@ -1,0 +1,65 @@
+@page "/form"
+@inject BlazorMovieContext DB
+
+@using BlazorApp.Data
+
+<PageTitle>Form</PageTitle>
+
+<h1>Form</h1>
+
+<p>Demonstrates form processed by the server - with model-binding and server-side validation</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Movie" OnValidSubmit="AddMovie">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <InputText id="title" @bind-Value="Movie.Title" class="form-control" />
+                <ValidationMessage For="() => Movie.Title" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="release-date" class="form-label">Release date:</label>
+                <InputDate id="release-date" @bind-Value="Movie.ReleaseDate" class="form-control" />
+                <ValidationMessage For="() => Movie.ReleaseDate" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="genre" class="form-label">Genre:</label>
+                <InputText id="genre" @bind-Value="Movie.Genre" class="form-control" />
+                <ValidationMessage For="() => Movie.Genre" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <InputNumber id="price" @bind-Value="Movie.Price" min="0" step="0.01" class="form-control" />
+                <ValidationMessage For="() => Movie.Price" class="text-danger" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    @if (movieAdded)
+    {
+        <span>
+            Movie was added.
+        </span>
+    }
+    <a href="/movies">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Movie Movie { get; set; } = new();
+
+    private bool movieAdded = false;
+
+    public async Task AddMovie()
+    {
+        DB.Movies.Add(Movie);
+        await DB.SaveChangesAsync();
+        movieAdded = true;
+    }
+}

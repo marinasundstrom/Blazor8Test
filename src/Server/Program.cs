@@ -1,4 +1,7 @@
 using BlazorApp;
+using BlazorApp.Data;
+
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddWebAssemblyComponents()
     .AddServerComponents();
+
+builder.Services.AddDbContext<BlazorMovieContext>(c => c.UseInMemoryDatabase("db"));
 
 var app = builder.Build();
 
