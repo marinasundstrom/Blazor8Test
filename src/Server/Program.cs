@@ -42,9 +42,9 @@ app.MapRazorComponents<App>()
     .AddWebAssemblyRenderMode()
     .AddServerRenderMode();
 
-app.MapGet("/api/weatherforecast", async (DateOnly startDate, IWeatherForecastService weatherForecastService) =>
+app.MapGet("/api/weatherforecast", async (DateOnly startDate, IWeatherForecastService weatherForecastService, CancellationToken cancellationToken) =>
     {
-        var forecasts = await weatherForecastService.GetWeatherForecasts(startDate);
+        var forecasts = await weatherForecastService.GetWeatherForecasts(startDate, cancellationToken);
         return Results.Ok(forecasts);
     })
     .WithName("GetWeatherForecast")

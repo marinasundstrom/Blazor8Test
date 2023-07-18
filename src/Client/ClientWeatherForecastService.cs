@@ -12,9 +12,9 @@ public sealed class ClientWeatherForecastService : IWeatherForecastService
         _httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<WeatherForecast>> GetWeatherForecasts(DateOnly startDate) 
+    public async Task<IEnumerable<WeatherForecast>> GetWeatherForecasts(DateOnly startDate, CancellationToken cancellationToken = default) 
     {
-        var startDateStr = DateOnly.FromDateTime(DateTime.Now).ToString("o");
+        var startDateStr = startDate.ToString("o");
 
         return await _httpClient.GetFromJsonAsync<WeatherForecast[]>($"/api/weatherforecast?startDate={startDateStr}");
     }

@@ -9,7 +9,7 @@ public sealed class WeatherForecastService : IWeatherForecastService
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    public Task<IEnumerable<WeatherForecast>> GetWeatherForecasts(DateOnly startDate) 
+    public Task<IEnumerable<WeatherForecast>> GetWeatherForecasts(DateOnly startDate, CancellationToken cancellationToken = default)
     {
         var forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
