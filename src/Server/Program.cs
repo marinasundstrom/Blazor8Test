@@ -19,7 +19,7 @@ builder.Services.AddDbContext<BlazorMovieContext>(c => c.UseInMemoryDatabase("db
 
 builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
-builder.Services.AddSingleton<RenderingContext, ServerRenderingContext>();
+builder.Services.AddScoped<RenderingContext, ServerRenderingContext>();
 
 var app = builder.Build();
 
