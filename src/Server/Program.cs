@@ -5,12 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddWebAssemblyComponents()
     .AddServerComponents();
 
 builder.Services.AddDbContext<BlazorMovieContext>(c => c.UseInMemoryDatabase("db"));
+
+builder.Services.AddScoped<WeatherForecastService>();
 
 var app = builder.Build();
 
@@ -22,6 +27,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
@@ -29,5 +37,13 @@ app.UseStaticFiles();
 app.MapRazorComponents<App>()
     .AddWebAssemblyRenderMode()
     .AddServerRenderMode();
+
+app.MapGet("/api/weatherforecast", (DateOnly startDate, WeatherForecastService weatherForecastService) =>
+    {
+        var forecasts = weatherForecastService.GetWeatherForecasts(startDate);
+        return Results.Ok(forecasts);
+    })
+    .WithName("GetWeatherForecast")
+    .WithOpenApi();;
 
 app.Run();
