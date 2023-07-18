@@ -17,6 +17,8 @@ builder.Services.AddDbContext<BlazorMovieContext>(c => c.UseInMemoryDatabase("db
 
 builder.Services.AddScoped<WeatherForecastService>();
 
+builder.Services.AddSingleton(sp => new RenderingContext(isServer: true));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
