@@ -1,0 +1,15 @@
+@page "/counter2"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p>This demonstrates interactive components and render modes. Components are prerendered on the server.</p>
+
+<p class="mt-4">Running on the server:</p>
+
+<Counter IncrementAmount="2" @rendermode="@RenderMode.Server" />
+
+<p>Running on the client with WebAssembly:</p>
+
+<Counter IncrementAmount="1" @rendermode="@RenderMode.WebAssembly" />
