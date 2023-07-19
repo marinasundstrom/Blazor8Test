@@ -25,7 +25,7 @@
             <div class="mb-3">
                 <label for="password" class="form-label">Password:</label>
                 <InputText type="password" id="password" @bind-Value="Model.Password" class="form-control" />
-                <ValidationMessage For="() => Model.Password" class="text-danger" />
+                <ValidationMessage For="() => Model.Password" />
             </div>
              <div class="mb-3">
                 <div class="form-check">
@@ -40,11 +40,11 @@
     </div>
 </div>
 
-<div>
-    @if (movieAdded)
+<div class="mt-4">
+    @if (loginUnsuccessful)
     {
-        <span>
-            Movie was added.
+        <span class="text-danger">
+            Login unsuccessful. Please check your credentials.
         </span>
     }
 </div>
@@ -54,40 +54,20 @@
     [SupplyParameterFromForm]
     public LoginModel Model { get; set; } = new();
 
-    private bool movieAdded = false;
+    private bool loginUnsuccessful = false;
 
     public async Task LoginUser()
     {
-    
-    // Require the user to have a confirmed email before they can log on.
-    var user = await UserManager.FindByNameAsync(Model.Username!);
-    if (user != null)
-    {
-        /*
-       if (!await UserManager.IsEmailConfirmedAsync(user.Id))
-       {
-          ViewBag.errorMessage = "You must have a confirmed email to log on.";
-          return View("Error");
-       } */
-    }
+            var user = await UserManager.FindByNameAsync(Model.Username!);
 
-    // This doesn't count login failures towards account lockout
-    // To enable password failures to trigger account lockout, change to shouldLockout: true
-    var result = await SignInManager.PasswordSignInAsync(Model.Username!, Model.Password!, Model.RememberMe, lockoutOnFailure: false);
-    if (result.Succeeded)
-    {
-        NavigationManager.NavigateTo("/");
-
-        /*
-        case SignInStatus.LockedOut:
-            return View("Lockout");
-        case SignInStatus.RequiresVerification:
-            return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-        case SignInStatus.Failure:
-        default:
-            ModelState.AddModelError("", "Invalid login attempt.");
-            return View(model);
-            */
+        var result = await SignInManager.PasswordSignInAsync(Model.Username!, Model.Password!, Model.RememberMe, lockoutOnFailure: false);
+        if (result.Succeeded)
+        {
+            NavigationManager.NavigateTo("/authentication/profile");
+        }
+        else
+        {
+            loginUnsuccessful = true;
         }
     }
 

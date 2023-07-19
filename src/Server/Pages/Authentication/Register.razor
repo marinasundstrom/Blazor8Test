@@ -33,21 +33,24 @@
     </div>
 </div>
 
-<div>
-    @if (movieAdded)
-    {
-        <span>
-            Movie was added.
-        </span>
-    }
-</div>
+@if(errors.Count == 1) 
+{
+    <ul class="text-danger mt-4">
+        @foreach (var error in errors)
+        {
+            <li>
+                @error
+            </li>
+        }
+    </ul>
+}
 
 @code {
 
     [SupplyParameterFromForm]
     public RegisterModel Model { get; set; } = new();
 
-    private bool movieAdded = false;
+    private List<string> errors = new ();
 
     public async Task RegisterUser()
     {
@@ -59,12 +62,13 @@
 
             await SignInManager.SignInAsync(user, isPersistent: true);
 
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/authentication/profile");
             return;
         }
         foreach (var error in result.Errors)
         {
-            //ModelState.AddModelError(string.Empty, error.Description);
+            errors.Clear();
+            errors.Add(error.Description);
         }
     }
 
