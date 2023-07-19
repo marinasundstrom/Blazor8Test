@@ -13,8 +13,7 @@
     <HeadOutlet />
 </head>
 
-<body>
-
+<body data-bs-theme="light">
     <CascadingAuthenticationState>
         <Router AppAssembly="@typeof(App).Assembly">
             <Found Context="routeData">
@@ -35,6 +34,7 @@
         </Router>
     </CascadingAuthenticationState>
 
+    <script src="js/lightswitch.js"></script>
     <script src="js/app.js" type="module"></script>
     <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="_framework/blazor.web.js" suppress-error="BL9992"></script>
