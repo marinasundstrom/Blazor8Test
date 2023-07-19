@@ -1,0 +1,16 @@
+@attribute [RenderModeWebAssembly(false)]
+
+@inject HttpClient HttpClient
+
+<button type="button" class="btn btn-primary" @onclick="Fetch">Get message</button>
+
+<p class="mt-4">@result</p>
+
+@code {
+    string? result;
+
+    public async Task Fetch() 
+    {
+        result = await HttpClient.GetStringAsync("/requires-auth");
+    }
+}

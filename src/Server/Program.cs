@@ -3,6 +3,7 @@ using System.Security.Claims;
 using BlazorApp;
 using BlazorApp.Data;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,9 @@ builder.Services.AddRazorComponents()
     .AddWebAssemblyComponents()
     .AddServerComponents();
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization()
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
 
 builder.Services.AddHttpContextAccessor();
 
