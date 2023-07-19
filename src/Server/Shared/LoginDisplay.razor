@@ -1,4 +1,4 @@
-@inject NavigationManager Navigation
+@inject ServerNavigationManager NavigationManager
 @inject SignInManager<IdentityUser> SignInManager
 
 @using Microsoft.AspNetCore.Identity
@@ -10,7 +10,9 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="/authentication/logout">Log out</a>
+            <EditForm Context="ctx" FormHandlerName="logout" method="post" Model="@Model" OnValidSubmit="BeginSignOut">
+                <button type="submit" class="nav-link btn btn-link border-0">Log out</button>
+            </EditForm>
         </li>
     </Authorized>
     <NotAuthorized>
@@ -25,9 +27,12 @@
 </AuthorizeView>
 
 @code{
+    [SupplyParameterFromForm(Name = "logout")]
+    public object Model { get; set; } = new();
+
     async Task BeginSignOut()
     {
         await SignInManager.SignOutAsync();
-        Navigation.NavigateTo("authentication/logout");
+        NavigationManager.NavigateTo("/authentication/logout");
     }
 }

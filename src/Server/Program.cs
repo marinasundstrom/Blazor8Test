@@ -29,6 +29,8 @@ builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
 builder.Services.AddScoped<RenderingContext, ServerRenderingContext>();
 
+builder.Services.AddScoped<ServerNavigationManager>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

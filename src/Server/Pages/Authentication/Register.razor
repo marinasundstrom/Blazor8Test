@@ -2,7 +2,8 @@
 @inject UserManager<IdentityUser> UserManager
 @inject SignInManager<IdentityUser> SignInManager
 @inject ILogger<Register> Logger
-@inject NavigationManager NavigationManager
+@inject ServerNavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
 
 @using BlazorApp.Data
 @using System.ComponentModel.DataAnnotations
@@ -57,7 +58,9 @@
             Logger.LogInformation("User created a new account with password.");
 
             await SignInManager.SignInAsync(user, isPersistent: true);
-            //NavigationManager.NavigateTo("/");
+
+            NavigationManager.NavigateTo("/");
+            return;
         }
         foreach (var error in result.Errors)
         {
