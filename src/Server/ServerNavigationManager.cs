@@ -17,9 +17,6 @@ public sealed class ServerNavigationManager
             return;
         }
 
-        var response = httpContext.Response;
-
-        response.StatusCode = (int)System.Net.HttpStatusCode.Redirect;
-        response.Headers.Location = uri;
+        httpContext.Response.Redirect(uri);
     }
 }
