@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>BlazorApp</title>
     <base href="/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="css/bootstrap-icons/bootstrap-icons.min.css" />
@@ -28,7 +27,7 @@
                 <FocusOnNavigate RouteData="@routeData" Selector="h1" />
             </Found>
             <NotFound>
-                <PageTitle>Not found</PageTitle>
+                <AppPageTitle>Not found</AppPageTitle>
                 <LayoutView Layout="@typeof(MainLayout)">
                     <p role="alert">Sorry, there's nothing at this address.</p>
                 </LayoutView>

@@ -9,7 +9,7 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
 
-<PageTitle>Register</PageTitle>
+<AppPageTitle>Register</AppPageTitle>
 
 <h1>Register</h1>
 
@@ -61,6 +61,8 @@
             Logger.LogInformation("User created a new account with password.");
 
             await SignInManager.SignInAsync(user, isPersistent: true);
+
+            Logger.LogInformation("User signed in.");
 
             NavigationManager.NavigateTo("/authentication/profile");
             return;

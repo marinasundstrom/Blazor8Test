@@ -8,7 +8,7 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
 
-<PageTitle>Login</PageTitle>
+<AppPageTitle>Log in</AppPageTitle>
 
 <h1>Log in</h1>
 
@@ -58,15 +58,19 @@
 
     public async Task LoginUser()
     {
-            var user = await UserManager.FindByNameAsync(Model.Username!);
+        var user = await UserManager.FindByNameAsync(Model.Username!);
 
         var result = await SignInManager.PasswordSignInAsync(Model.Username!, Model.Password!, Model.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
+            Logger.LogInformation("User signed-in successfully");
+
             NavigationManager.NavigateTo("/authentication/profile");
         }
         else
         {
+            Logger.LogInformation("User was not authenticated");
+
             loginUnsuccessful = true;
         }
     }
