@@ -1,0 +1,33 @@
+@inject NavigationManager Navigation
+@inject SignInManager<IdentityUser> SignInManager
+
+@using Microsoft.AspNetCore.Identity
+
+<AuthorizeView>
+    <Authorized>
+        <li class="nav-item">
+            <a class="nav-link" href="/authentication/profile">Hello, @context.User.Identity?.Name!</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/authentication/logout">Log out</a>
+        </li>
+    </Authorized>
+    <NotAuthorized>
+        <li class="nav-item">
+            <a class="nav-link" href="/authentication/register">Register</a>              
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="/authentication/login">Log in</a>
+        </li>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    async Task BeginSignOut()
+    {
+        await SignInManager.SignOutAsync();
+        Navigation.NavigateTo("authentication/logout");
+    }
+}

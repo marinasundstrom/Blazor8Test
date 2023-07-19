@@ -1,6 +1,9 @@
+using System.Security.Claims;
+
 using BlazorApp;
 using BlazorApp.Data;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +16,14 @@ builder.Services.AddRazorComponents()
     .AddWebAssemblyComponents()
     .AddServerComponents();
 
+builder.Services.AddAuthorization();
+
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<BlazorMovieContext>(c => c.UseInMemoryDatabase("db"));
+builder.Services.AddDbContext<ApplicationDbContext>(c => c.UseInMemoryDatabase("db"));
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
@@ -41,6 +49,10 @@ app.UseStaticFiles();
 app.MapRazorComponents<App>()
     .AddWebAssemblyRenderMode()
     .AddServerRenderMode();
+
+app.MapGroup("/identity").MapIdentityApi<IdentityUser>();
+
+app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization();
 
 app.MapGet("/api/weatherforecast", async (DateOnly startDate, IWeatherForecastService weatherForecastService, CancellationToken cancellationToken) =>
     {
