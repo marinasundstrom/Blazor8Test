@@ -1,6 +1,6 @@
 namespace BlazorApp;
 
-public sealed class ServerNavigationManager : RenderingContext
+public sealed class ServerNavigationManager
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
