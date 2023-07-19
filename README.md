@@ -6,6 +6,8 @@ Check the ``Counter`` components.
 
 Based on a sample by [Artak](https://github.com/mkArtakMSFT).
 
+Data is stored temporary in-memory. There is no database.
+
 ## Contents
 
 Demonstrating the following features that have been made possible by the new unified architecture:
@@ -18,6 +20,8 @@ Demonstrating the following features that have been made possible by the new uni
 
 * Form model binding & validation in SSR pages.
 
+* Authorization - Custom Login and Register pages with Server-side rendered Razor components (Instead of MVC Razor Pages).
+
 Pre-rendering just works. If you have a server-side rendered page with interactive components then they will all be rendered together the first time.
 
 ## Technical details
@@ -27,6 +31,8 @@ Pre-rendering just works. If you have a server-side rendered page with interacti
 * There is a ``RenderingContext`` object that can be injected into components to check whether your component is running on the server, or on the client (WebAssembly). There is also a property telling whether prerendering is in progress.
 
 * Added a ``Shared`` project for stuff (Models etc) that is used by both Server and Client. There is an interface called ``IWeatherForecastService`` which has two implementations: one for server and another for the client.
+
+* **Workaround**: I have created a custom ``ServerNavigationManager`` to deal with navigation from server-side rendered pages. It simply modifies the ``HttpContext.Request`` in order to make the browser redirect to the desired location.
 
 ## Publish
 
