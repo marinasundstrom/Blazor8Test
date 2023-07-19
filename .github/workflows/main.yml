@@ -4,6 +4,7 @@ on:
       - main
     paths-ignore:
       - '**/README.md'
+      - '**/LICENSE.md'
       
 name: Build image and Deploy container
 
