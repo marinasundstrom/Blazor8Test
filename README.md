@@ -8,9 +8,23 @@ Based on a sample by [Artak](https://github.com/mkArtakMSFT).
 
 Data is stored temporary in-memory. There is no database.
 
+https://blazor8app.graypebble-0c46426e.westus2.azurecontainerapps.io/
+
+## Highlights
+
+* Largely server-side rendered app - pages rendered and served by server on a request-basis.
+
+* Showing how to handle a pre-render scenario with components in WebAssembly.
+
+* Authentication using cookies. Custom server-side rendered pages for log-in and registering user. 
+
+* Making HTTP request from client Web Assembly to Web API on server using cookie authentication. Sharing cookie with server app.
+
+* UI in Bootstrap 5.3 - Basic UI. Handling light mode and dark themes.
+
 ## Contents
 
-Demonstrating the following features that have been made possible by the new unified architecture:
+Demonstrating the following features that have been made possible in Blazor on the server by the new unified architecture:
 
 * Server-side rendering (SSR) of page components - like "MVC Razor Pages" but with Razor components. Handy if you are building content-rich pages, that doesn't necessarily need full interactivity. Enables caching and Search-engine optimization (SEO).
 
@@ -24,17 +38,15 @@ Demonstrating the following features that have been made possible by the new uni
 
 Pre-rendering just works. If you have a server-side rendered page with interactive components then they will all be rendered together the first time.
 
-## Highlights
+### When to use Server-side rendering (SSR)
 
-* Largely server-side rendered app - pages rendered and served by server on a request-basis.
+So why should you choose server-side rendering, over interactive client apps?
 
-* Showing how to handle a pre-render scenario with components in WebAssembly.
+1. You are just serving content on a page that does't make significant use of interactivity: Like a blog page, or a product catalog.
 
-* Authentication using cookies. Custom server-side rendered pages for logging in and registering user. 
+2. When you want pages to be indexed by a search engine. Enabling Search-engine optimization (SEO).
 
-* Make HTTP request from client Web Assembly to Web API with cookie authentication. Sharing cookie with app.
-
-* Bootstrap - Handling themes: light mode and dark mode.
+And you will still have the option to embedd interactive components that will be pre-rendered together with the server-side rendered page.
 
 ## Technical details
 
