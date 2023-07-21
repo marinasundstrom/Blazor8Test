@@ -1,4 +1,16 @@
-export function init() {
+function initScrollToTop() {
+    var scrollToTop = document.querySelector("#scrollToTop");
+    
+    if(!scrollToTop) return;
+
+    scrollToTop.addEventListener("click", ev => {
+        ev.preventDefault();
+        
+        window.scrollTo(0, 0);
+    });
+}
+
+function init() {
     const offCanvasCollapse = document.querySelector('.offcanvas-collapse');
 
     // Toggle off canvas when clicking the menu toggle
@@ -29,3 +41,4 @@ export function init() {
 }
 
 init();
+initScrollToTop();
