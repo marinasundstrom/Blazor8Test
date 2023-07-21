@@ -30,7 +30,9 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 
 builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 
-builder.Services.AddScoped<RenderingContext, ServerRenderingContext>();
+builder.Services.AddSingleton<RenderingContext, ServerRenderingContext>();
+
+builder.Services.AddSingleton<RequestContext>();
 
 builder.Services.AddScoped<ServerNavigationManager>();
 

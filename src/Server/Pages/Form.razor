@@ -1,5 +1,7 @@
 @page "/form"
+@inject ILogger<Form> Logger
 @inject ApplicationDbContext DB
+@inject RequestContext RequestContext
 
 @using BlazorApp.Data
 
@@ -54,6 +56,19 @@
     public Movie Movie { get; set; } = new();
 
     private bool movieAdded = false;
+
+    protected override Task OnInitializedAsync() 
+    {
+        // INFO: Suppose that you are creating a combined CRUD view in SSR.
+        //       Then you might have to distinguish between GET, POST, and other HTTP methods.
+
+        if(RequestContext.IsPost()) 
+        {
+            Logger.LogInformation("This was a post");
+        }
+
+        return Task.CompletedTask;
+    }
 
     public async Task AddMovie()
     {
