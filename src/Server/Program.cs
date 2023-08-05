@@ -5,12 +5,21 @@ using BlazorApp.Data;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using  Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApiDocument(config => {
+    config.PostProcess = document =>
+    {
+        document.Info.Title = "BlazorApp API";
+    };
+
+    config.DefaultReferenceTypeNullHandling = NJsonSchema.Generation.ReferenceTypeNullHandling.NotNull;
+});
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -46,8 +55,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseOpenApi(p => p.Path = "/swagger/{documentName}/swagger.yaml");
+app.UseSwaggerUi3(p => p.DocumentPath = "/swagger/{documentName}/swagger.yaml");
 
 app.UseHttpsRedirection();
 
@@ -57,16 +66,21 @@ app.MapRazorComponents<App>()
     .AddWebAssemblyRenderMode()
     .AddServerRenderMode();
 
-app.MapGroup("/identity").MapIdentityApi<IdentityUser>();
+app.MapGroup("/identity")
+    .MapIdentityApi<IdentityUser>()
+    .WithTags("Identity");
 
-app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization();
+app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization()
+    .WithName("BlazorApp_RequiresAuth")
+    .WithTags("BlazorApp");
 
-app.MapGet("/api/weatherforecast", async (DateOnly startDate, IWeatherForecastService weatherForecastService, CancellationToken cancellationToken) =>
+app.MapGet("/api/weatherforecast", async Task<Results<Ok<IEnumerable<WeatherForecast>>, BadRequest>> (DateOnly startDate, IWeatherForecastService weatherForecastService, CancellationToken cancellationToken) =>
     {
         var forecasts = await weatherForecastService.GetWeatherForecasts(startDate, cancellationToken);
-        return Results.Ok(forecasts);
+        return TypedResults.Ok(forecasts);
     })
-    .WithName("GetWeatherForecast")
+    .WithName("WeatherForecast_GetWeatherForecast")
+    .WithTags("WeatherForecast")
     .WithOpenApi();;
 
 app.Run();
