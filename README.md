@@ -36,6 +36,8 @@ Demonstrating the following features that have been made possible in Blazor on t
 
 * Authorization - Custom Login and Register pages with Server-side rendered Razor components (Instead of MVC Razor Pages).
 
+* Open API with YAML. Swagger UI. Generated C# client.
+
 Pre-rendering just works. If you have a server-side rendered page with interactive components then they will all be rendered together the first time.
 
 ### When to use Server-side rendering (SSR)
