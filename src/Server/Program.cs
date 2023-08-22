@@ -47,6 +47,8 @@ builder.Services.AddScoped<ServerNavigationManager>();
 
 var app = builder.Build();
 
+app.UseStatusCodePagesWithRedirects("/error/{0}");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
