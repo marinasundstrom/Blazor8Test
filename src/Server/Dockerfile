@@ -6,11 +6,12 @@ ENV ASPNETCORE_URLS=http://+:8080
 
 USER app
 FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
-WORKDIR /src
+WORKDIR /
 COPY ["src/Server/BlazorApp.csproj", "src/Server/"]
+COPY ["NuGet.config", "/"]
 RUN dotnet restore "src/Server/BlazorApp.csproj"
 COPY . .
-WORKDIR "/src/src/Server"
+WORKDIR "/src/Server"
 RUN dotnet build "BlazorApp.csproj" -c Release -o /app/build
 
 FROM build AS publish
