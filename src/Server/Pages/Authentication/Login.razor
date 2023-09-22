@@ -2,7 +2,7 @@
 @inject UserManager<IdentityUser> UserManager
 @inject SignInManager<IdentityUser> SignInManager
 @inject ILogger<Login> Logger
-@inject ServerNavigationManager NavigationManager
+@inject NavigationManager NavigationManager
 
 @using BlazorApp.Data
 @using System.ComponentModel.DataAnnotations
@@ -14,7 +14,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <EditForm method="post" Model="Model" OnValidSubmit="LoginUser">
+        <EditForm FormName="loginForm" method="post" Model="@Model" OnValidSubmit="LoginUser">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" />
             <div class="mb-3">
@@ -51,7 +51,7 @@
 
 @code {
 
-    [SupplyParameterFromForm]
+    [SupplyParameterFromForm(Handler = "loginForm")]
     public LoginModel Model { get; set; } = new();
 
     private bool loginUnsuccessful = false;

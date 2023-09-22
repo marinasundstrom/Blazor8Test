@@ -52,7 +52,7 @@
 
 @code {
 
-    [SupplyParameterFromForm]
+    [SupplyParameterFromForm(Handler = "myForm")]
     public Movie Movie { get; set; } = new();
 
     private bool movieAdded = false;

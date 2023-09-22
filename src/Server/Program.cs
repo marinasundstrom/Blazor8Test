@@ -43,8 +43,6 @@ builder.Services.AddSingleton<RenderingContext, ServerRenderingContext>();
 
 builder.Services.AddSingleton<RequestContext>();
 
-builder.Services.AddScoped<ServerNavigationManager>();
-
 var app = builder.Build();
 
 app.UseStatusCodePagesWithRedirects("/error/{0}");

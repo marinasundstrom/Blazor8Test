@@ -2,7 +2,7 @@
 @inject UserManager<IdentityUser> UserManager
 @inject SignInManager<IdentityUser> SignInManager
 @inject ILogger<Register> Logger
-@inject ServerNavigationManager NavigationManager
+@inject NavigationManager NavigationManager
 @inject IHttpContextAccessor HttpContextAccessor
 
 @using BlazorApp.Data
@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <EditForm method="post" Model="Model" OnValidSubmit="RegisterUser">
+        <EditForm Model="@Model" FormName="registerForm" method="post" OnValidSubmit="RegisterUser">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" />
             <div class="mb-3">
@@ -47,7 +47,7 @@
 
 @code {
 
-    [SupplyParameterFromForm]
+    [SupplyParameterFromForm(Handler = "registerForm")]
     public RegisterModel Model { get; set; } = new();
 
     private List<string> errors = new ();
