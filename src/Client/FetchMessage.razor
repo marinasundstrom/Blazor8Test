@@ -4,7 +4,10 @@
 
 <button type="button" class="btn btn-primary" @onclick="Fetch">Get message</button>
 
-<p class="mt-4">@result</p>
+@if(result is not null) 
+{
+    <p class="mt-4">@result</p>
+}
 
 @code {
     string? result;
