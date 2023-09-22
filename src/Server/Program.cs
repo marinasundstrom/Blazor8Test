@@ -66,7 +66,8 @@ app.UseStaticFiles();
 
 app.MapRazorComponents<App>()
     .AddWebAssemblyRenderMode()
-    .AddServerRenderMode();
+    .AddServerRenderMode()
+    .AddAdditionalAssemblies(typeof(Client.FetchData).Assembly);
 
 app.MapGroup("/identity")
     .MapIdentityApi<IdentityUser>()

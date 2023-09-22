@@ -1,4 +1,4 @@
-# Blazor app for .NET 8 Preview 6
+# Blazor app for .NET 8 RC1
 
 Demonstrates the Server-side rendered pages, and the 2 render modes for embedded interactive components: Server and WebAssembly,
 

@@ -1,11 +1,11 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-preview AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 8080
 
 ENV ASPNETCORE_URLS=http://+:8080
 
 USER app
-FROM mcr.microsoft.com/dotnet/sdk:8.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /
 COPY ["src/Server/BlazorApp.csproj", "src/Server/"]
 COPY ["NuGet.config", "/"]
