@@ -1,10 +1,8 @@
-# Blazor app for .NET 8 RC1
+# Blazor app for .NET 8 RC 2
 
 Demonstrates the Server-side rendered pages, and the 2 render modes for embedded interactive components: Server and WebAssembly,
 
 Check the ``Counter`` components.
-
-Based on a sample by [Artak](https://github.com/mkArtakMSFT).
 
 Data is stored temporary in-memory. There is no database.
 
@@ -59,8 +57,6 @@ And you will still have the option to embedd interactive components that will be
 * Added a ``Shared`` project for stuff (Models etc) that is used by both Server and Client. There is an interface called ``IWeatherForecastService`` which has two implementations: one for server and another for the client.
 
 * Using Cookie Authentication because that is best suitable for a server-side rendered app. Any client-side component in WebAssembly also uses cookie auth when doing HTTP request to the Web API.
-
-* **Workaround**: I have created a custom ``ServerNavigationManager`` to deal with navigation from server-side rendered pages. It simply modifies the ``HttpContext.Request`` in order to make the browser redirect to the desired location.
 
 ## Publish
 
