@@ -1,4 +1,7 @@
 @page "/fetchdata"
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveAuto
+@attribute [StreamRendering(true)]
 @inject IWeatherForecastService WeatherForecastService
 
 @using BlazorApp
@@ -11,7 +14,7 @@
 
 <p>The page is prerendered on the server. But currently there is no way to pass that server state to the client.</p>
 
-@if (forecasts == null)
+@if (forecasts is null)
 {
     <p><em>Loading...</em></p>
 }
