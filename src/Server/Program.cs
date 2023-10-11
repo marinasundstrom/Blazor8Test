@@ -23,8 +23,8 @@ builder.Services.AddOpenApiDocument(config => {
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddWebAssemblyComponents()
-    .AddServerComponents();
+    .AddInteractiveWebAssemblyComponents()
+    .AddInteractiveServerComponents();
 
 builder.Services.AddAuthorization()
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -62,9 +62,11 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+app.UseAntiforgery();
+
 app.MapRazorComponents<App>()
-    .AddWebAssemblyRenderMode()
-    .AddServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode()
+    .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(Client.FetchData).Assembly);
 
 app.MapGroup("/identity")

@@ -63,10 +63,15 @@
         setTheme(getPreferredTheme())
       }
     })
-  
+
+    Blazor.addEventListener('enhancedload', () => {
+      setTheme(getPreferredTheme())
+      showActiveTheme(getPreferredTheme())
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
       showActiveTheme(getPreferredTheme())
-  
+
       document.querySelectorAll('[data-bs-theme-value]')
         .forEach(toggle => {
           toggle.addEventListener('click', () => {
@@ -76,5 +81,5 @@
             showActiveTheme(theme, true)
           })
         })
-    })
+   });
   })()

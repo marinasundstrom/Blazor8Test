@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <EditForm Model="@Model" FormName="registerForm" method="post" OnValidSubmit="RegisterUser">
+        <EditForm method="post" Model="@Model" FormName="RegisterForm" OnValidSubmit="RegisterUser">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" />
             <div class="mb-3">
@@ -47,10 +47,12 @@
 
 @code {
 
-    [SupplyParameterFromForm(Handler = "registerForm")]
-    public RegisterModel Model { get; set; } = new();
+    [SupplyParameterFromForm]
+    public RegisterModel? Model { get; set; }
 
     private List<string> errors = new ();
+
+    protected override void OnInitialized() => Model ??= new();
 
     public async Task RegisterUser()
     {

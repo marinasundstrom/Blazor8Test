@@ -10,7 +10,7 @@
         </li>
 
         <li class="nav-item col-6 col-md-auto">
-            <EditForm Context="ctx" FormName="logout" method="post" Model="@this" OnValidSubmit="BeginSignOut">
+            <EditForm Context="ctx" FormName="LogoutForm" method="post" Model="@Foo" OnValidSubmit="BeginSignOut">
                 <button type="submit" class="nav-link border-0">Log out</button>
             </EditForm>
         </li>
@@ -27,8 +27,10 @@
 </AuthorizeView>
 
 @code{
-    [SupplyParameterFromForm]
+    [SupplyParameterFromForm(Name = "LogoutForm")]
     public string? Foo {  get; set; }
+
+    protected override void OnInitialized() => Foo = "";
 
     async Task BeginSignOut()
     {

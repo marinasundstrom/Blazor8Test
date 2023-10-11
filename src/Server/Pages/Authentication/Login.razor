@@ -14,7 +14,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <EditForm FormName="loginForm" method="post" Model="@Model" OnValidSubmit="LoginUser">
+        <EditForm method="post" Model="@Model" FormName="LoginForm" OnValidSubmit="LoginUser">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" />
             <div class="mb-3">
@@ -51,10 +51,12 @@
 
 @code {
 
-    [SupplyParameterFromForm(Handler = "loginForm")]
-    public LoginModel Model { get; set; } = new();
+    [SupplyParameterFromForm]
+    public LoginModel? Model { get; set; }
 
     private bool loginUnsuccessful = false;
+
+    protected override void OnInitialized() => Model ??= new();
 
     public async Task LoginUser()
     {
