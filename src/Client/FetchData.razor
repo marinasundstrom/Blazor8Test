@@ -1,8 +1,10 @@
 @page "/fetchdata"
+@implements IDisposable
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @rendermode InteractiveAuto
 @attribute [StreamRendering(true)]
 @inject IWeatherForecastService WeatherForecastService
+@inject PersistentComponentState ApplicationState
 
 @using BlazorApp
 
@@ -45,14 +47,38 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
+    private PersistingComponentStateSubscription persistingSubscription;
 
     protected override async Task OnInitializedAsync()
     {
-        // INFO: If this component is being prerendered by the server, 
-        //       then the server implementation of WeatherForecastService will be used instead of the one in the client.
+        persistingSubscription = 
+            ApplicationState.RegisterOnPersisting(PersistData);
 
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        
-        forecasts = (await WeatherForecastService.GetWeatherForecasts(startDate)).ToArray();
+        if (!ApplicationState.TryTakeFromJson<WeatherForecast[]>(
+            "forecasts", out var restored))
+        {
+            // INFO: If this component is being prerendered by the server, 
+            //       then the server implementation of WeatherForecastService will be used instead of the one in the client.
+
+            var startDate = DateOnly.FromDateTime(DateTime.Now);
+            
+            forecasts = (await WeatherForecastService.GetWeatherForecasts(startDate)).ToArray();
+        }
+        else
+        {
+            forecasts = restored!;
+        }
+    }
+
+    private Task PersistData()
+    {
+        ApplicationState.PersistAsJson("forecasts", forecasts);
+
+        return Task.CompletedTask;
+    }
+
+    void IDisposable.Dispose()
+    {
+        persistingSubscription.Dispose();
     }
 }
