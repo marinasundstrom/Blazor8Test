@@ -5,6 +5,8 @@ on:
     paths-ignore:
       - '**/README.md'
       - '**/LICENSE.md'
+      - 'images/**'
+      - 'docs/**'
       
 name: Build image and Deploy container
 

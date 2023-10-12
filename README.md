@@ -8,6 +8,8 @@ Data is stored temporary in-memory. There is no database.
 
 https://blazor8app.graypebble-0c46426e.westus2.azurecontainerapps.io/
 
+<img src="images/weather-forecast.png" />
+
 ## Highlights
 
 * Largely server-side rendered app - pages rendered and served by server on a request-basis.
@@ -18,7 +20,7 @@ https://blazor8app.graypebble-0c46426e.westus2.azurecontainerapps.io/
 
 * Making HTTP request from client Web Assembly to Web API on server using cookie authentication. Sharing cookie with server app.
 
-* UI in Bootstrap 5.3 - Basic UI. Handling light mode and dark themes.
+* UI in Bootstrap 5.3 - Basic UI. Handling light mode and dark themes. It uses JS events provided by Blazor to re-apply theme upon enhanced navigation.
 
 ## Contents
 
