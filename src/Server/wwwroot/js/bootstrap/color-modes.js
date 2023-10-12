@@ -70,7 +70,7 @@
       setTheme(getPreferredTheme())
       showActiveTheme(getPreferredTheme())
 
-      // This is not the responsibility of 'color-modes'.
+      // This is not a responsibility of 'color-modes'.
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     });
 
