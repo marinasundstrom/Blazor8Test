@@ -63,10 +63,15 @@
         setTheme(getPreferredTheme())
       }
     })
+    
+    // This should perhaps not be here
 
     Blazor.addEventListener('enhancedload', () => {
       setTheme(getPreferredTheme())
       showActiveTheme(getPreferredTheme())
+
+      // This is not the responsibility of 'color-modes'.
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     });
 
     window.addEventListener('DOMContentLoaded', () => {
