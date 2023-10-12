@@ -67,7 +67,7 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddInteractiveServerRenderMode()
-    .AddAdditionalAssemblies(typeof(Client.FetchData).Assembly);
+    .AddAdditionalAssemblies(typeof(Client.Pages.FetchData).Assembly);
 
 app.MapGroup("/identity")
     .MapIdentityApi<IdentityUser>()
