@@ -18,6 +18,8 @@ This app uses cookie authentication.
 
 ## Use cookie for authorization from client
 
+The advantage of using cookie auth is that you can login on the server, with the provided server-rendered Identity pages, and at the end the auth cookie is being set so that the client browser may use it. This cookie can be used even by the portion of the app that is using WebAssembly.
+
 In order to use the auth cookie when authorizing from a WebAssembly context, you need to make the ``HttpClient`` include that cookie.
 
 We do so by creating a handler:
