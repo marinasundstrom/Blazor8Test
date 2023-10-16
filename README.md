@@ -1,5 +1,7 @@
 # Blazor app for .NET 8 RC 2
 
+![Store Web](https://github.com/marinasundstrom/Blazor8Test/actions/workflows/main.yml/badge.svg)
+
 Demonstrates the Server-side rendered pages, and the 2 render modes for embedded interactive components: Server and WebAssembly,
 
 Check the ``Counter`` components.
