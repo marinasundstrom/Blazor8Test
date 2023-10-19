@@ -1,13 +1,17 @@
 # Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
 
 version: '3.4'
+name: blazorapp
+
+include:
+  - docker-compose.deps.yml
 
 services:
   blazorapp:
     image: blazorapp
     build:
       context: .
-      dockerfile: src/Server/Dockerfile
+      dockerfile: src/BlazorApp/Server/Dockerfile
     ports:
       - 8080:8080
     environment:

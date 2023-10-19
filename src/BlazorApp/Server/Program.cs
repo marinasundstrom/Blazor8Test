@@ -3,13 +3,25 @@ using System.Security.Claims;
 using BlazorApp;
 using BlazorApp.Data;
 
+using Diagnostics;
+
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using  Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using MassTransit;
+using Contracts;
+
+string serviceName = "BlazorApp";
+string serviceVersion = "1.0";
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configuration)
+                        .Enrich.WithProperty("Application", serviceName)
+                        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config => {
@@ -20,6 +32,8 @@ builder.Services.AddOpenApiDocument(config => {
 
     config.DefaultReferenceTypeNullHandling = NJsonSchema.Generation.ReferenceTypeNullHandling.NotNull;
 });
+
+builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -32,7 +46,10 @@ builder.Services.AddAuthorization()
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<ApplicationDbContext>(c => c.UseInMemoryDatabase("db"));
+builder.Services.AddSqlServer<ApplicationDbContext>(
+    builder.Configuration.GetValue<string>("blazorapp-db-connectionstring")
+    ?? builder.Configuration.GetConnectionString("BlazorAppDb"),
+    c => c.EnableRetryOnFailure());
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -43,7 +60,31 @@ builder.Services.AddSingleton<RenderingContext, ServerRenderingContext>();
 
 builder.Services.AddSingleton<RequestContext>();
 
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+
+    x.AddConsumers(typeof(Program).Assembly);
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        var rabbitmqHost = builder.Configuration["RABBITMQ_HOST"] ?? "localhost";
+
+        cfg.Host(rabbitmqHost, "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
+
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
+
+app.MapObservability();
 
 app.UseStatusCodePagesWithRedirects("/error/{0}");
 
@@ -58,7 +99,8 @@ if (!app.Environment.IsDevelopment())
 app.UseOpenApi(p => p.Path = "/swagger/{documentName}/swagger.yaml");
 app.UseSwaggerUi3(p => p.DocumentPath = "/swagger/{documentName}/swagger.yaml");
 
-app.UseHttpsRedirection();
+// INFO: Disabled because of Prometheus polling with HTTP
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
@@ -84,6 +126,46 @@ app.MapGet("/api/weatherforecast", async Task<Results<Ok<IEnumerable<WeatherFore
     })
     .WithName("WeatherForecast_GetWeatherForecast")
     .WithTags("WeatherForecast")
-    .WithOpenApi();;
+    .WithOpenApi();
+
+app.MapPost("/test", async (int secretNumber, IPublishEndpoint publishEndpoint) => await publishEndpoint.Publish(new TestRequest { SecretNumber = secretNumber }))
+    .WithName("BlazorApp_Test")
+    .WithTags("BlazorApp");
+
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    //await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureCreatedAsync(); 
+
+    if (args.Contains("--seed"))
+    {
+        await SeedData(context, configuration, logger);
+        return;
+    }
+}
+
+app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
 app.Run();
+
+static async Task SeedData(ApplicationDbContext context, IConfiguration configuration, ILogger<Program> logger)
+{
+    try
+    {
+        await Seed.SeedData(context, configuration);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred seeding the " +
+            "database. Error: {Message}", ex.Message);
+    }
+}
+
+
+// INFO: Makes Program class visible to IntegrationTests.
+public partial class Program { }
+

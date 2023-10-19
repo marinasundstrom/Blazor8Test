@@ -1,4 +1,13 @@
+name: Build image and Deploy container
+
+env:
+  DOTNET_VERSION: '8.0.x' # set this to the .NET Core version to use
+  SERVICE_DIR: 'src/BlazorApp/Server'
+  UNITTESTS_DIR: 'test/BlazorApp/BlazorApp.Tests'
+  CONTAINERAPP_NAME: 'blazorapp'
+
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -7,8 +16,6 @@ on:
       - '**/LICENSE.md'
       - 'images/**'
       - 'docs/**'
-      
-name: Build image and Deploy container
 
 jobs:
     build-and-deploy:
@@ -22,25 +29,36 @@ jobs:
           uses: azure/login@v1
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-        - name: 'Build and push image'
-          uses: azure/docker-login@v1
+
+        - name: Set up .NET
+          uses: actions/setup-dotnet@v3
           with:
-            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            username: ${{ secrets.REGISTRY_USERNAME }}
-            password: ${{ secrets.REGISTRY_PASSWORD }}
-        - run: |
-            docker build . -f src/Server/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/blazor8app:${{ github.sha }}
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/blazor8app:${{ github.sha }}
+            dotnet-version: ${{ env.DOTNET_VERSION }}
+
+        - name: Install dependencies
+          run: dotnet restore "${{ env.SERVICE_DIR }}"
+    
+        - name: Build
+          run: dotnet build "${{ env.SERVICE_DIR }}"
+    
+        - name: Test with the dotnet CLI
+          run: dotnet test "${{ env.UNITTESTS_DIR }}"
             
         - name: 'Deploy Container App'
           uses: azure/container-apps-deploy-action@v1
           with:
-             registryUrl: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-             registryUsername: ${{ secrets.REGISTRY_USERNAME }}
-             registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
-             imageToDeploy: ${{ secrets.REGISTRY_LOGIN_SERVER }}/blazor8app:${{ github.sha }}
-             containerAppName: blazor8app
-             resourceGroup: ${{ secrets.RESOURCE_GROUP }}
-             location: 'Sweden Central'
-             targetPort: 8080
+            appSourcePath: ${{ github.workspace }}
+            dockerfilePath: ${{ env.SERVICE_DIR }}/Dockerfile
+            registryUrl: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+            registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
+            containerAppName: ${{ env.CONTAINERAPP_NAME }}
+            resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+            location: 'Sweden Central'
+            targetPort: 8080
+
+        # - name: Run EF migrations
+        #   run: | 
+        #     dotnet tool install --global dotnet-ef --version 8.0.0-rc.2.*
+        #     dotnet tool restore
+        #     dotnet ef database update -p '${{ env.SERVICE_DIR }}' --connection '${{ secrets.BLAZORAPPDBCONNECTION }}'

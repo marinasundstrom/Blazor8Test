@@ -1,3 +1,46 @@
 {
-    "dotnet.defaultSolution": "src/BlazorApp.sln"
+    "dotnet.defaultSolution": "src/BlazorApp.sln",
+    "restoreTerminals.terminals": [
+        {
+            "splitTerminals": [
+                {
+                    "name": "Main",
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "BlazorApp",
+                    "commands": [
+                        "dotnet run --project src/BlazorApp/Server"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Worker",
+                    "commands": [
+                        "dotnet run --project src/Worker"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        },
+        {
+            "splitTerminals": [
+                {
+                    "name": "Docker",
+                    "commands": [
+                        "docker compose -f docker-compose.deps.yml up -d"
+                    ],
+                    "shouldRunCommands": false
+                }
+            ]
+        }
+    ]
 }
