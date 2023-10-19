@@ -44,8 +44,6 @@ app.MapObservability();
 
 app.MapGet("/", () => "Hello World!");
 
-app.UseOpenTelemetryPrometheusScrapingEndpoint();
-
 app.Run();
 
 // INFO: Makes Program class visible to IntegrationTests.

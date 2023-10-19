@@ -68,8 +68,8 @@ public static class DiagnosticExtensions
         return services;
     }
 
-    public static void MapObservability(this IEndpointRouteBuilder routes)
+    public static void MapObservability(this WebApplication app)
     {
-        routes.MapPrometheusScrapingEndpoint();
+        app.UseOpenTelemetryPrometheusScrapingEndpoint();
     }
 }

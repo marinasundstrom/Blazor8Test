@@ -148,8 +148,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.UseOpenTelemetryPrometheusScrapingEndpoint();
-
 app.Run();
 
 static async Task SeedData(ApplicationDbContext context, IConfiguration configuration, ILogger<Program> logger)
