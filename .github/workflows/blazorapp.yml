@@ -1,21 +1,19 @@
-name: Build image and Deploy container
+name: Build image and Deploy BlazorApp
 
 env:
   DOTNET_VERSION: '8.0.x' # set this to the .NET Core version to use
   SERVICE_DIR: 'src/BlazorApp/Server'
-  UNITTESTS_DIR: 'test/BlazorApp/BlazorApp.Tests'
-  CONTAINERAPP_NAME: 'blazorapp'
+  UNITTESTS_DIR: 'test/BlazorApp.Tests'
+  CONTAINERAPP_NAME: 'blazor8app'
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**/README.md'
-      - '**/LICENSE.md'
-      - 'images/**'
-      - 'docs/**'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "src/BlazorApp/**"
+  #     - "src/Contracts/**"
 
 jobs:
     build-and-deploy:

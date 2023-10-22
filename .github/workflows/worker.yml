@@ -1,0 +1,56 @@
+name: Build image and Deploy Worker
+
+env:
+  DOTNET_VERSION: '8.0.x' # set this to the .NET Core version to use
+  SERVICE_DIR: 'src/Worker'
+  UNITTESTS_DIR: 'test/Worker.Tests'
+  CONTAINERAPP_NAME: 'worker'
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - "src/Worker/**"
+  #     - "src/Contracts/**"
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+        # checkout the repo
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@main
+          
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        - name: Set up .NET
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: ${{ env.DOTNET_VERSION }}
+
+        - name: Install dependencies
+          run: dotnet restore "${{ env.SERVICE_DIR }}"
+    
+        - name: Build
+          run: dotnet build "${{ env.SERVICE_DIR }}"
+    
+        - name: Test with the dotnet CLI
+          run: dotnet test "${{ env.UNITTESTS_DIR }}"
+            
+        - name: 'Deploy Container App'
+          uses: azure/container-apps-deploy-action@v1
+          with:
+            appSourcePath: ${{ github.workspace }}
+            dockerfilePath: ${{ env.SERVICE_DIR }}/Dockerfile
+            registryUrl: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+            registryPassword: ${{ secrets.REGISTRY_PASSWORD }}
+            containerAppName: ${{ env.CONTAINERAPP_NAME }}
+            resourceGroup: ${{ secrets.RESOURCE_GROUP }}
+            location: 'Sweden Central'
+            targetPort: 8080
