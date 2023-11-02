@@ -104,6 +104,8 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(Client.Pages.FetchData).Assembly);
 
+app.MapWeatherForecastEndpoints();
+
 var versionedApi = app.NewVersionedApi("BlazorApp");
 
 versionedApi.MapGroup("api/v{version:apiVersion}/identity")
@@ -115,16 +117,6 @@ versionedApi.MapGet("api/v{version:apiVersion}/requires-auth", (ClaimsPrincipal 
     .WithName("BlazorApp_RequiresAuth")
     .WithTags("BlazorApp")
     .HasApiVersion(1, 0);
-
-versionedApi.MapGet("/api/v{version:apiVersion}/weatherforecast", async Task<Results<Ok<IEnumerable<WeatherForecast>>, BadRequest>> (DateOnly startDate, IWeatherForecastService weatherForecastService, CancellationToken cancellationToken) =>
-    {
-        var forecasts = await weatherForecastService.GetWeatherForecasts(startDate, cancellationToken);
-        return TypedResults.Ok(forecasts);
-    })
-    .WithName("WeatherForecast_GetWeatherForecast")
-    .WithTags("WeatherForecast")
-    .HasApiVersion(1, 0)
-    .WithOpenApi();
 
 versionedApi.MapPost("/api/v{version:apiVersion}/test", async (int secretNumber, IPublishEndpoint publishEndpoint) => await publishEndpoint.Publish(new TestRequest { SecretNumber = secretNumber }))
     .WithName("BlazorApp_Test")
