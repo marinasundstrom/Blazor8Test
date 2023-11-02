@@ -113,12 +113,12 @@ versionedApi.MapGroup("api/v{version:apiVersion}/identity")
     .WithTags("Identity")
     .HasApiVersion(1, 0);
 
-versionedApi.MapGet("api/v{version:apiVersion}/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization()
+versionedApi.MapGet("api/v{version:apiVersion}/requires-auth", static (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization()
     .WithName("BlazorApp_RequiresAuth")
     .WithTags("BlazorApp")
     .HasApiVersion(1, 0);
 
-versionedApi.MapPost("/api/v{version:apiVersion}/test", async (int secretNumber, IPublishEndpoint publishEndpoint) => await publishEndpoint.Publish(new TestRequest { SecretNumber = secretNumber }))
+versionedApi.MapPost("/api/v{version:apiVersion}/test", static async (int secretNumber, IPublishEndpoint publishEndpoint) => await publishEndpoint.Publish(new TestRequest { SecretNumber = secretNumber }))
     .WithName("BlazorApp_Test")
     .WithTags("BlazorApp")
     .HasApiVersion(1, 0);
