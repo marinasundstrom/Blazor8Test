@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	 <RazorLangVersion>8.0</RazorLangVersion>
+    <RazorLangVersion>8.0</RazorLangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
@@ -14,17 +14,20 @@
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0-rc.2.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-rc.2.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server"
+      Version="8.0.0-rc.2.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
+      Version="8.0.0-rc.2.*" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-rc.2.*" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.18.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-rc.2.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-rc.2.*" />
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
-		<PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.2.0-beta.1" />
+    <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.2.0-beta.1" />
     <PackageReference Include="MassTransit" Version="8.0.16" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.16" />
   </ItemGroup>

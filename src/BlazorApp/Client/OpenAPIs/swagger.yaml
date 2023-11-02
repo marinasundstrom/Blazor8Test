@@ -1,303 +1,333 @@
 x-generator: NSwag v13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
-  title: BlazorApp API
-  version: 1.0.0
+  title: BlazorApp
+  version: v1
 servers:
-- url: https://localhost:7188
+  - url: https://localhost:7188
 paths:
-  /requires-auth:
+  /api/v1/identity/register:
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityRegister
+      requestBody:
+        x-name: registration
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HttpValidationProblemDetails"
+  /api/v1/identity/login:
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityLogin
+      parameters:
+        - name: useCookies
+          in: query
+          schema:
+            type: boolean
+            nullable: true
+          x-position: 2
+        - name: useSessionCookies
+          in: query
+          schema:
+            type: boolean
+            nullable: true
+          x-position: 3
+      requestBody:
+        x-name: login
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessTokenResponse"
+  /api/v1/identity/refresh:
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityRefresh
+      requestBody:
+        x-name: refreshRequest
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessTokenResponse"
+  /api/v1/identity/confirmEmail:
     get:
       tags:
-      - BlazorApp
+        - BlazorApp
+        - Identity
+      operationId: GetApiV1IdentityConfirmEmail
+      parameters:
+        - name: userId
+          in: query
+          schema:
+            type: string
+          x-position: 1
+        - name: code
+          in: query
+          schema:
+            type: string
+          x-position: 2
+        - name: changedEmail
+          in: query
+          schema:
+            type: string
+          x-position: 3
+      responses:
+        200:
+          description: ""
+  /api/v1/identity/resendConfirmationEmail:
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityResendConfirmationEmail
+      requestBody:
+        x-name: resendRequest
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResendConfirmationEmailRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+  /api/v1/identity/forgotPassword:
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityForgotPassword
+      requestBody:
+        x-name: resetRequest
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPasswordRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HttpValidationProblemDetails"
+  /api/v1/identity/resetPassword:
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityResetPassword
+      requestBody:
+        x-name: resetRequest
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HttpValidationProblemDetails"
+  /api/v1/identity/manage/2fa:
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityManage2fa
+      requestBody:
+        x-name: tfaRequest
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TwoFactorRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TwoFactorResponse"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HttpValidationProblemDetails"
+        404:
+          description: ""
+      security:
+        - JWT: []
+  /api/v1/identity/manage/info:
+    get:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: GetApiV1IdentityManageInfo
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InfoResponse"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HttpValidationProblemDetails"
+        404:
+          description: ""
+      security:
+        - JWT: []
+    post:
+      tags:
+        - BlazorApp
+        - Identity
+      operationId: PostApiV1IdentityManageInfo
+      requestBody:
+        x-name: infoRequest
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InfoRequest"
+        x-position: 1
+      responses:
+        200:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InfoResponse"
+        400:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HttpValidationProblemDetails"
+        404:
+          description: ""
+      security:
+        - JWT: []
+  /api/v1/requires-auth:
+    get:
+      tags:
+        - BlazorApp
+        - BlazorApp
       operationId: BlazorApp_RequiresAuth
       responses:
         200:
-          description: ''
+          description: ""
           content:
             application/json:
               schema:
                 type: string
-  /api/weatherforecast:
+      security:
+        - JWT: []
+  /api/v1/weatherforecast:
     get:
       tags:
-      - WeatherForecast
+        - BlazorApp
+        - WeatherForecast
       operationId: WeatherForecast_GetWeatherForecast
       parameters:
-      - name: startDate
-        in: query
-        required: true
-        schema:
-          type: string
-          format: date
-        x-position: 1
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          x-position: 1
       responses:
         200:
-          description: ''
+          description: ""
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/WeatherForecast'
+                  $ref: "#/components/schemas/WeatherForecast"
         400:
-          description: ''
-  /identity/register:
+          description: ""
+  /api/v1/test:
     post:
       tags:
-      - Identity
-      operationId: PostIdentityRegister
-      requestBody:
-        x-name: registration
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterRequest'
-        x-position: 1
-      responses:
-        200:
-          description: ''
-        400:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpValidationProblemDetails'
-  /identity/login:
-    post:
-      tags:
-      - Identity
-      operationId: PostIdentityLogin
+        - BlazorApp
+        - BlazorApp
+      operationId: BlazorApp_Test
       parameters:
-      - name: cookieMode
-        in: query
-        schema:
-          type: boolean
-          nullable: true
-        x-position: 2
-      - name: persistCookies
-        in: query
-        schema:
-          type: boolean
-          nullable: true
-        x-position: 3
-      requestBody:
-        x-name: login
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-        x-position: 1
+        - name: secretNumber
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+          x-position: 1
       responses:
         200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccessTokenResponse'
-  /identity/refresh:
-    post:
-      tags:
-      - Identity
-      operationId: PostIdentityRefresh
-      requestBody:
-        x-name: refreshRequest
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshRequest'
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccessTokenResponse'
-  /identity/confirmEmail:
-    get:
-      tags:
-      - Identity
-      operationId: MapIdentityApi-/identity/confirmEmail
-      parameters:
-      - name: userId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: code
-        in: query
-        schema:
-          type: string
-        x-position: 2
-      - name: changedEmail
-        in: query
-        schema:
-          type: string
-        x-position: 3
-      responses:
-        200:
-          description: ''
-  /identity/resendConfirmationEmail:
-    post:
-      tags:
-      - Identity
-      operationId: PostIdentityResendConfirmationEmail
-      requestBody:
-        x-name: resendRequest
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ResendEmailRequest'
-        x-position: 1
-      responses:
-        200:
-          description: ''
-  /identity/resetPassword:
-    post:
-      tags:
-      - Identity
-      operationId: PostIdentityResetPassword
-      requestBody:
-        x-name: resetRequest
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ResetPasswordRequest'
-        x-position: 1
-      responses:
-        200:
-          description: ''
-        400:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpValidationProblemDetails'
-  /identity/account/2fa:
-    get:
-      tags:
-      - Identity
-      operationId: GetIdentityAccount2fa
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TwoFactorResponse'
-        404:
-          description: ''
-    post:
-      tags:
-      - Identity
-      operationId: PostIdentityAccount2fa
-      requestBody:
-        x-name: tfaRequest
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TwoFactorRequest'
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TwoFactorResponse'
-        400:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpValidationProblemDetails'
-        404:
-          description: ''
-  /identity/account/info:
-    get:
-      tags:
-      - Identity
-      operationId: GetIdentityAccountInfo
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InfoResponse'
-        400:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpValidationProblemDetails'
-        404:
-          description: ''
-    post:
-      tags:
-      - Identity
-      operationId: PostIdentityAccountInfo
-      requestBody:
-        x-name: infoRequest
-        description: ''
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InfoRequest'
-        x-position: 1
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InfoResponse'
-        400:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpValidationProblemDetails'
-        404:
-          description: ''
+          description: ""
 components:
   schemas:
-    WeatherForecast:
-      type: object
-      additionalProperties: false
-      properties:
-        date:
-          type: string
-          format: date
-        temperatureC:
-          type: integer
-          format: int32
-        summary:
-          type: string
-          nullable: true
-        temperatureF:
-          type: integer
-          format: int32
     HttpValidationProblemDetails:
       allOf:
-      - $ref: '#/components/schemas/ProblemDetails'
-      - type: object
-        additionalProperties:
-          nullable: true
-        properties:
-          errors:
-            type: object
-            additionalProperties:
-              type: array
-              items:
-                type: string
+        - $ref: "#/components/schemas/ProblemDetails"
+        - type: object
+          additionalProperties:
+            nullable: true
+          properties:
+            errors:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: string
     ProblemDetails:
       type: object
       additionalProperties:
@@ -323,30 +353,28 @@ components:
       type: object
       additionalProperties: false
       properties:
-        username:
+        email:
           type: string
         password:
-          type: string
-        email:
           type: string
     AccessTokenResponse:
       type: object
       additionalProperties: false
       properties:
-        token_type:
+        tokenType:
           type: string
-        access_token:
+        accessToken:
           type: string
-        expires_in:
+        expiresIn:
           type: integer
           format: int64
-        refresh_token:
+        refreshToken:
           type: string
     LoginRequest:
       type: object
       additionalProperties: false
       properties:
-        username:
+        email:
           type: string
         password:
           type: string
@@ -362,7 +390,13 @@ components:
       properties:
         refreshToken:
           type: string
-    ResendEmailRequest:
+    ResendConfirmationEmailRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        email:
+          type: string
+    ForgotPasswordRequest:
       type: object
       additionalProperties: false
       properties:
@@ -376,10 +410,8 @@ components:
           type: string
         resetCode:
           type: string
-          nullable: true
         newPassword:
           type: string
-          nullable: true
     TwoFactorResponse:
       type: object
       additionalProperties: false
@@ -418,10 +450,10 @@ components:
       type: object
       additionalProperties: false
       properties:
-        username:
-          type: string
         email:
           type: string
+        isEmailConfirmed:
+          type: boolean
         claims:
           type: object
           additionalProperties:
@@ -430,9 +462,6 @@ components:
       type: object
       additionalProperties: false
       properties:
-        newUsername:
-          type: string
-          nullable: true
         newEmail:
           type: string
           nullable: true
@@ -442,3 +471,25 @@ components:
         oldPassword:
           type: string
           nullable: true
+    WeatherForecast:
+      type: object
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+        temperatureC:
+          type: integer
+          format: int32
+        summary:
+          type: string
+          nullable: true
+        temperatureF:
+          type: integer
+          format: int32
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: "Type into the textbox: Bearer {your JWT token}."
+      name: Authorization
+      in: header

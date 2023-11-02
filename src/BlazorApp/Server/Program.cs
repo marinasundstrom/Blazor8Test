@@ -4,11 +4,11 @@ using BlazorApp;
 using BlazorApp.Data;
 
 using Diagnostics;
+using Extensions;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using  Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using MassTransit;
@@ -24,14 +24,8 @@ builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(builder.Configu
                         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApiDocument(config => {
-    config.PostProcess = document =>
-    {
-        document.Info.Title = "BlazorApp API";
-    };
-
-    config.DefaultReferenceTypeNullHandling = NJsonSchema.Generation.ReferenceTypeNullHandling.NotNull;
-});
+builder.Services.AddApiVersioningServices();
+builder.Services.AddOpenApi(serviceName);
 
 builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);
 
@@ -96,8 +90,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseOpenApi(p => p.Path = "/swagger/{documentName}/swagger.yaml");
-app.UseSwaggerUi3(p => p.DocumentPath = "/swagger/{documentName}/swagger.yaml");
+app.UseOpenApi();
 
 // INFO: Disabled because of Prometheus polling with HTTP
 //app.UseHttpsRedirection();
@@ -111,26 +104,32 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddAdditionalAssemblies(typeof(Client.Pages.FetchData).Assembly);
 
-app.MapGroup("/identity")
+var versionedApi = app.NewVersionedApi("BlazorApp");
+
+versionedApi.MapGroup("api/v{version:apiVersion}/identity")
     .MapIdentityApi<IdentityUser>()
-    .WithTags("Identity");
+    .WithTags("Identity")
+    .HasApiVersion(1, 0);
 
-app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization()
+versionedApi.MapGet("api/v{version:apiVersion}/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization()
     .WithName("BlazorApp_RequiresAuth")
-    .WithTags("BlazorApp");
+    .WithTags("BlazorApp")
+    .HasApiVersion(1, 0);
 
-app.MapGet("/api/weatherforecast", async Task<Results<Ok<IEnumerable<WeatherForecast>>, BadRequest>> (DateOnly startDate, IWeatherForecastService weatherForecastService, CancellationToken cancellationToken) =>
+versionedApi.MapGet("/api/v{version:apiVersion}/weatherforecast", async Task<Results<Ok<IEnumerable<WeatherForecast>>, BadRequest>> (DateOnly startDate, IWeatherForecastService weatherForecastService, CancellationToken cancellationToken) =>
     {
         var forecasts = await weatherForecastService.GetWeatherForecasts(startDate, cancellationToken);
         return TypedResults.Ok(forecasts);
     })
     .WithName("WeatherForecast_GetWeatherForecast")
     .WithTags("WeatherForecast")
+    .HasApiVersion(1, 0)
     .WithOpenApi();
 
-app.MapPost("/test", async (int secretNumber, IPublishEndpoint publishEndpoint) => await publishEndpoint.Publish(new TestRequest { SecretNumber = secretNumber }))
+versionedApi.MapPost("/api/v{version:apiVersion}/test", async (int secretNumber, IPublishEndpoint publishEndpoint) => await publishEndpoint.Publish(new TestRequest { SecretNumber = secretNumber }))
     .WithName("BlazorApp_Test")
-    .WithTags("BlazorApp");
+    .WithTags("BlazorApp")
+    .HasApiVersion(1, 0);
 
 using (var scope = app.Services.CreateScope())
 {
@@ -139,7 +138,7 @@ using (var scope = app.Services.CreateScope())
     var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
     //await context.Database.EnsureDeletedAsync();
-    await context.Database.EnsureCreatedAsync(); 
+    await context.Database.EnsureCreatedAsync();
 
     if (args.Contains("--seed"))
     {
