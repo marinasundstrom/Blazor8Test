@@ -1,5 +1,6 @@
 using BlazorApp;
 using Client;
+using Microsoft.Extensions.Http.Resilience;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Http;
@@ -11,7 +12,8 @@ builder.Services
 
 builder.Services
     .AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
-    .AddHttpMessageHandler<CookieHandler>();
+    .AddHttpMessageHandler<CookieHandler>()
+    .AddStandardResilienceHandler(); ;
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("WebAPI"));
