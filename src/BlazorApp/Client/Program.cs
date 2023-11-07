@@ -13,7 +13,7 @@ builder.Services
 builder.Services
     .AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
     .AddHttpMessageHandler<CookieHandler>()
-    .AddStandardResilienceHandler(); ;
+    .AddStandardResilienceHandler();
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("WebAPI"));
