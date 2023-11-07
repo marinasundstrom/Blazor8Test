@@ -46,6 +46,7 @@ builder.Services.AddSingleton<RequestContext>();
 var app = builder.Build();
 
 app.UseStatusCodePagesWithRedirects("/error/{0}");
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
